@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://unpkg.com/purecss@0.6.2/build/menus-min.css">
+    <link rel="stylesheet" href="https://unpkg.com/purecss@0.6.2/build/base-min.css">
+    <link rel="stylesheet" href="https://unpkg.com/purecss@0.6.2/build/grids-min.css">
+    <link rel="stylesheet" href="https://unpkg.com/purecss@0.6.2/build/grids-responsive-min.css">
+    <script src="//cdnjs.cloudflare.com/ajax/libs/moment.js/2.17.1/moment-with-locales.min.js"></script>
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+    <script src="/customLocalization.js"></script>
+</head>
+<body>
+<div class="pure-menu pure-menu-horizontal">
+    <ul class="pure-menu-list">
+        <li class="pure-menu-item pure-menu-has-children pure-menu-allow-hover">
+            <a href="#" id="menuLink1" class="pure-menu-link">Language</a>
+            <ul class="pure-menu-children">
+                <li class="pure-menu-item"><a href="#" class="pure-menu-link languageButton" data-language="ru">Русский</a></li>
+                <li class="pure-menu-item"><a href="#" class="pure-menu-link languageButton" data-language="uk">Українська</a></li>
+                <li class="pure-menu-item"><a href="#" class="pure-menu-link languageButton" data-language="en">English</a></li>
+                <li class="pure-menu-item"><a href="#" class="pure-menu-link languageButton" data-language="de">Deutsch</a></li>
+            </ul>
+        </li>
+    </ul>
+</div>
+<div class="pure-g">
+    <div class="pure-u-1 pure-u-md-1-3"></div>
+    <div class="pure-u-1 pure-u-md-1-3 greetings"></div>
+    <div class="pure-u-1 pure-u-md-1-3"></div>
+</div>
+<div class="pure-g">
+    <div class="pure-u-1 pure-u-md-1-3"></div>
+    <div class="pure-u-1 pure-u-md-1-3 todayDate"></div>
+    <div class="pure-u-1 pure-u-md-1-3"></div>
+</div>
+<div class="pure-g">
+    <div class="pure-u-1 pure-u-md-1-3"></div>
+    <div class="pure-u-1 pure-u-md-1-3 goneTimePercent"></div>
+    <div class="pure-u-1 pure-u-md-1-3"></div>
+</div>
+<div class="pure-g">
+    <div class="pure-u-1 pure-u-md-1-3"></div>
+    <div class="pure-u-1 pure-u-md-1-3 leftTime"></div>
+    <div class="pure-u-1 pure-u-md-1-3"> </div>
+</div>
+<div class="pure-g">
+    <div class="pure-u-1 pure-u-md-1-3"></div>
+    <div class="pure-u-1 pure-u-md-1-3 advice"></div>
+    <div class="pure-u-1 pure-u-md-1-3"></div>
+</div>
+
+<script>
+
+    $(document).ready(function(){
+        $('.cbalink').remove();
+        var localLanguage = 'en';
+        if (localStorage.getItem('localLanguage') == null) {
+            var usersLanguage = false;
+            if (usersLanguage && usersLanguage.length >= 2) {
+                newLocalLanguage = usersLanguage.substr(0, 2);
+                console.log(Object.keys(localeText).indexOf(newLocalLanguage));
+                if (Object.keys(localeText).indexOf(newLocalLanguage) >= 0) {
+                    localLanguage = newLocalLanguage;
+                }
+            }
+            localStorage.setItem('localLanguage', localLanguage);
+        } else {
+            localLanguage = localStorage.getItem('localLanguage');
+        }
+        drawPage();
+
+        $('.languageButton').click(function () {
+            localLanguage = $(this).data('language');
+            localStorage.setItem('localLanguage', localLanguage);
+            drawPage();
+        });
+
+        function drawPage() {
+            var hourNow = moment().hour();
+            var greetingType = 'default';
+            if (hourNow > 4 && hourNow <= 11) {
+                greetingType = 'morning';
+            } else if (hourNow > 11 && hourNow <= 17)  {
+                greetingType = 'day';
+            } else if (hourNow > 17 && hourNow <= 22){
+                greetingType = 'evening';
+            }
+            console.log(localeText[localLanguage]['greetings'][greetingType]);
+            var todayDate = moment().locale(localLanguage).format("dddd, MMMM Do YYYY");
+            $('.greetings').text(localeText[localLanguage]['greetings'][greetingType]);
+            $('.todayDate').text(localeText[localLanguage].todayDate +' '+ todayDate);
+            $('.goneTimePercent').text();
+            $('.leftTime').text(localeText[localLanguage].leftTime);
+            $('.advice').text(localeText[localLanguage].advice);
+        }
+
+
+        console.log(typeof moment().hour());
+    });
+</script>
+</body>
+</html>

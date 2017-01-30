@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Count</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/uikit/3.0.0-beta.6/css/uikit.min.css" />
+    <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&amp;subset=cyrillic,cyrillic-ext,latin-ext" rel="stylesheet">
+    <script src="http://cdnjs.cloudflare.com/ajax/libs/moment.js/2.17.1/moment-with-locales.min.js"></script>
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/uikit/3.0.0-beta.6/js/uikit.min.js"></script>
+    <style>
+        body{
+            font-family: 'Roboto', sans-serif;
+        }
+        #offcanvas-reveal{
+            font-weight: 300;
+        }
+    </style>
+</head>
+<body>
+<nav class="uk-navbar uk-navbar-container uk-margin">
+    <div class="uk-navbar-left">
+        <a class="uk-button uk-button-default" type="button" uk-toggle="target: #offcanvas-reveal"  class="uk-navbar-toggle" uk-navbar-toggle-icon href="#"></a>
+    </div>
+</nav>
+
+<div id="offcanvas-reveal" uk-offcanvas="mode: reveal; overlay: true">
+    <div class="uk-offcanvas-bar">
+        <div class="uk-position-small uk-position-right">
+            <button type="button" class=" uk-offcanvas-close" uk-close></button>
+        </div>
+        <div>
+            <h4 class='uk-heading-line' id="menuLink1">Language</h4>
+            <ul class="uk-list uk-list-large uk-nav uk-nav-default">
+                <li><a href="#" class="languageButton uk-offcanvas-close" data-language="ru">Русский</a></li>
+                <li><a href="#" class="languageButton uk-offcanvas-close" data-language="uk">Українська</a></li>
+                <li><a href="#" class="languageButton uk-offcanvas-close" data-language="en">English</a></li>
+                <li><a href="#" class="languageButton uk-offcanvas-close" data-language="de">Deutsch</a></li>
+            </ul>
+        </div>
+    </div>
+</div>
+
+<div class="uk-margin-xlarge-top">
+    <div class="uk-card uk-card-default uk-card-body uk-animation-scale-up">
+        <div class="uk-flex uk-flex-center">
+            <div class=" uk-card-title greetings"></div>
+        </div>
+        <div class="uk-flex uk-flex-center">
+            <div class="todayDate"></div>
+        </div>
+        <div class="uk-flex uk-flex-center">
+            <div class="goneTimePercent"></div>
+        </div>
+        <progress id="progressbar" class="uk-progress" value="" max="100"></progress>
+        <div class="uk-flex uk-flex-center">
+            <span class="uk-badge">
+                <span class="progress-badge"></span>%
+            </span>
+        </div>
+        <div class="uk-flex uk-flex-center">
+            <div class="leftTime"></div>
+        </div>
+        <div class="uk-flex uk-flex-center">
+            <div class="advice uk-text-bold"></div>
+        </div>
+    </div>
+</div>
+
+
+
+
+
+
+<script>
+    $(document).ready(function(){
+
+        var localeText = {
+            uk: {
+                name: 'Українська',
+                greetings: {
+                    morning: 'Доброго ранку',
+                    day: 'Доброго дня',
+                    evening: 'Добрий вечір',
+                    default: 'Привіт'
+                },
+                todayDate: 'сьогодні',
+                goneTime: 'минуло',
+                leftTime: 'залишилося',
+                advice: 'Hе марнуй свій час!',
+                visitMessage: 'Ви востаннє відвідували сайт '
+            },
+            en: {
+                name: 'English',
+                greetings: {
+                    morning: 'Good morning',
+                    day: 'Good afternoon',
+                    evening: 'Good evening',
+                    default: 'Hi'
+                },
+                todayDate: 'today is ',
+                goneTime: '',
+                leftTime: 'left',
+                advice: "Don't waste your time!",
+                visitMessage: 'Last time you have visited site '
+            },
+            de: {
+                name: 'Deutsch',
+                greetings: {
+                    morning: 'Guten Morgen',
+                    day: 'Guten Tag',
+                    evening: 'Guten Abend',
+                    default: 'Hallo'
+                },
+                todayDate: 'heute ist ',
+                goneTime: '',
+                leftTime: '',
+                advice: 'Verschwende die Zeit nicht!',
+                visitMessage: ''
+            },
+            ru: {
+                name: 'Русский',
+                greetings: {
+                    morning: 'Доброе утро',
+                    day: 'Добрый день',
+                    evening: 'Добрый вечер',
+                    default: 'Привет'
+                },
+                todayDate: 'сегодня',
+                goneTime: 'прошло',
+                leftTime: 'осталось',
+                advice: 'Не трать свое время!',
+                visitMessage: 'В последний раз Вы посещали сайт '
+            }
+        };
+        var yearStart = moment().startOf('year');
+        var yearFinish = moment().endOf("year");
+        var daysInYear = yearFinish.diff(yearStart, 'days');
+        var numberOfDay = moment().dayOfYear();
+        //var daysInYear = moment().endOf("year").diff(moment().startOf('year'), 'days');
+        var percent = (( numberOfDay * 100 ) / daysInYear).toPrecision(1);
+        var localLanguage = 'en';
+        var hourNow = moment().hour();
+
+
+        $('.cbalink').remove();
+
+        if (localStorage.getItem('localLanguage') == null) {
+            var usersLanguage = false;
+            if (usersLanguage && usersLanguage.length >= 2) {
+                newLocalLanguage = usersLanguage.substr(0, 2);
+                console.log(Object.keys(localeText).indexOf(newLocalLanguage));
+                if (Object.keys(localeText).indexOf(newLocalLanguage) >= 0) {
+                    localLanguage = newLocalLanguage;
+                }
+            }
+            localStorage.setItem('localLanguage', localLanguage);
+        } else {
+            localLanguage = localStorage.getItem('localLanguage');
+        }
+        renderPage();
+
+        $('.languageButton').click(function () {
+            localLanguage = $(this).data('language');
+            localStorage.setItem('localLanguage', localLanguage);
+            renderPage();
+        });
+
+
+        function firstRender(){
+            var now = JSON.stringify(moment().toObject());
+            if ( localStorage.getItem('lastVisit') == null ){
+                localStorage.setItem('lastVisit', now);
+            } else {
+                _timeFromLastVisit = JSON.parse(localStorage.getItem('lastVisit'));
+                var daysFromLastVisit = moment.duration(_timeFromLastVisit).days();
+                var message = '';
+                if (daysFromLastVisit > 0) {
+                    message = localeText[localLanguage]['visitMessage'] + moment(_timeFromLastVisit).fromNow();
+                    UIkit.notification({
+                        message:'<div class="uk-text-small uk-text-center">' + message + '</div>',
+                        timeout: 2000,
+                    });
+                }
+                localStorage.setItem('lastVisit', now);
+            }
+
+        }
+
+        function renderPage(col) {
+            moment.locale(localLanguage);
+            var greetingType = 'default';
+            if (hourNow > 4 && hourNow <= 11) {
+                greetingType = 'morning';
+            } else if (hourNow > 11 && hourNow <= 17)  {
+                greetingType = 'day';
+            } else if (hourNow > 17 && hourNow <= 22){
+                greetingType = 'evening';
+            }
+            var todayDate = moment().format('LL');
+
+
+//            var start = moment().startOf('year');
+//            var end   = moment();
+//
+//
+//            var timePassedMessage = end.from(start);
+            $('.greetings').text(localeText[localLanguage]['greetings'][greetingType]);
+            $('.todayDate').text(localeText[localLanguage].todayDate +' '+ todayDate);
+//            $('.goneTimePercent').text(timePassedMessage);
+            $('.progress-badge').text(percent);
+            $('#progressbar').val(percent);
+//            $('.leftTime').text(localeText[localLanguage].leftTime);
+            $('.advice').text(localeText[localLanguage].advice);
+            $('title').text(localeText[localLanguage]['greetings'][greetingType]);
+            firstRender();
+
+
+//            var m1 = moment('2017-01-01');
+//            var m2 = moment('2017-05-03');
+//            var diff = moment.preciseDiff(m1, m2); // '1 month 2 days 3 hours 4 minutes 5 seconds'
+//
+//            console.log(
+//                diff
+//            );
+        }
+
+
+
+
+
+
+
+    });
+
+
+</script>
+</body>
+</html>

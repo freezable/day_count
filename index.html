@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>Count</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/uikit/3.0.0-beta.6/css/uikit.min.css" />
     <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&amp;subset=cyrillic,cyrillic-ext,latin-ext" rel="stylesheet">
@@ -63,7 +63,7 @@
             <div class="leftTime"></div>
         </div>
         <div class="uk-flex uk-flex-center">
-            <div class="advice"></div>
+            <div class="advice uk-text-bold"></div>
         </div>
     </div>
 </div>
@@ -144,7 +144,7 @@
         var hourNow = moment().hour();
 
 
-//        $('.cbalink').remove();
+        $('.cbalink').remove();
 
         if (localStorage.getItem('localLanguage') == null) {
             var usersLanguage = false;
@@ -213,6 +213,7 @@
             $('#progressbar').val(percent);
 //            $('.leftTime').text(localeText[localLanguage].leftTime);
             $('.advice').text(localeText[localLanguage].advice);
+            $('title').text(localeText[localLanguage]['greetings'][greetingType]);
             firstRender();
 
 

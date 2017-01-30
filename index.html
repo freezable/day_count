@@ -68,14 +68,8 @@
     </div>
 </div>
 
-
-
-
-
-
 <script>
     $(document).ready(function(){
-
         var localeText = {
             uk: {
                 name: 'Українська',
@@ -143,9 +137,6 @@
         var localLanguage = 'en';
         var hourNow = moment().hour();
 
-
-        $('.cbalink').remove();
-
         if (localStorage.getItem('localLanguage') == null) {
             var usersLanguage = false;
             if (usersLanguage && usersLanguage.length >= 2) {
@@ -167,7 +158,6 @@
             renderPage();
         });
 
-
         function firstRender(){
             var now = JSON.stringify(moment().toObject());
             if ( localStorage.getItem('lastVisit') == null ){
@@ -188,7 +178,7 @@
 
         }
 
-        function renderPage(col) {
+        function renderPage() {
             moment.locale(localLanguage);
             var greetingType = 'default';
             if (hourNow > 4 && hourNow <= 11) {
@@ -200,12 +190,10 @@
             }
             var todayDate = moment().format('LL');
 
-
 //            var start = moment().startOf('year');
 //            var end   = moment();
-//
-//
 //            var timePassedMessage = end.from(start);
+
             $('.greetings').text(localeText[localLanguage]['greetings'][greetingType]);
             $('.todayDate').text(localeText[localLanguage].todayDate +' '+ todayDate);
 //            $('.goneTimePercent').text(timePassedMessage);
@@ -216,25 +204,16 @@
             $('title').text(localeText[localLanguage]['greetings'][greetingType]);
             firstRender();
 
-
 //            var m1 = moment('2017-01-01');
 //            var m2 = moment('2017-05-03');
 //            var diff = moment.preciseDiff(m1, m2); // '1 month 2 days 3 hours 4 minutes 5 seconds'
-//
 //            console.log(
 //                diff
 //            );
+
         }
-
-
-
-
-
-
-
     });
-
-
 </script>
+
 </body>
 </html>

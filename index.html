@@ -131,8 +131,7 @@
         var yearFinish = moment().endOf("year");
         var daysInYear = yearFinish.diff(yearStart, 'days');
         var numberOfDay = moment().dayOfYear();
-        //var daysInYear = moment().endOf("year").diff(moment().startOf('year'), 'days');
-        var percent = (( numberOfDay * 100 ) / daysInYear).toPrecision(1);
+        var percent = (( numberOfDay * 100 ) / daysInYear).toFixed(0);
         var localLanguage = 'en';
         var hourNow = moment().hour();
 
@@ -140,7 +139,6 @@
             var usersLanguage = false;
             if (usersLanguage && usersLanguage.length >= 2) {
                 newLocalLanguage = usersLanguage.substr(0, 2);
-                console.log(Object.keys(localeText).indexOf(newLocalLanguage));
                 if (Object.keys(localeText).indexOf(newLocalLanguage) >= 0) {
                     localLanguage = newLocalLanguage;
                 }
@@ -178,7 +176,6 @@
         }
 
         function renderPage() {
-            console.log(hourNow);
             moment.locale(localLanguage);
             var greetingType = 'default';
             if (hourNow > 4 && hourNow <= 11) {
@@ -190,26 +187,14 @@
             }
             var todayDate = moment().format('LL');
 
-//            var start = moment().startOf('year');
-//            var end   = moment();
-//            var timePassedMessage = end.from(start);
-
             $('.greetings').text(localeText[localLanguage]['greetings'][greetingType]);
             $('.todayDate').text(localeText[localLanguage].todayDate +' '+ todayDate);
             $('.goneTimePercent').text(localeText[localLanguage].goneTime);
             $('.progress-badge').text(percent);
             $('#progressbar').val(percent);
-//            $('.leftTime').text(localeText[localLanguage].leftTime);
             $('.advice').text(localeText[localLanguage].advice);
             $('title').text(localeText[localLanguage]['greetings'][greetingType]);
             firstRender();
-
-//            var m1 = moment('2017-01-01');
-//            var m2 = moment('2017-05-03');
-//            var diff = moment.preciseDiff(m1, m2); // '1 month 2 days 3 hours 4 minutes 5 seconds'
-//            console.log(
-//                diff
-//            );
 
         }
     });
